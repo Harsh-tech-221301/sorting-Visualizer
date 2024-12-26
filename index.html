@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer</title>
+    <style>
+        .parentDiv {
+            display: flex;
+            flex-wrap: nowrap;
+            background-color: rgb(218, 236, 250);
+            border: 10px solid red;
+            justify-content: center;
+            height: 600px; /* Ensure height for bars */
+            align-items: flex-end; /* Align bars to the bottom */
+        }
+
+        .startbtn {
+            display: flex;
+            border: 2px solid;
+            background-color: rgb(107, 11, 196);
+            margin: 12px;
+            position: relative;
+            left: 600px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .innerDiv {
+            width: 20px; 
+            margin: 2px; 
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="parentDiv"></div>
+    <button class="startbtn">Start</button>
+
+    <script>
+        let arr = [50, 40, 30, 20, 10, 60, 80, 5];
+        let parentDiv = document.getElementsByClassName('parentDiv');
+        let btn = document.getElementsByClassName('startbtn');
+
+        
+        let i = 0;
+        arr.forEach(e => {
+            let innerDiv = document.createElement('div');
+            innerDiv.style.height = (e * 6 + 'px'); 
+            innerDiv.style.backgroundColor = '#' + ((1 << 24) * Math.random() | 1).toString(16);
+            innerDiv.setAttribute('id', 'elem' + i); 
+            i++;
+            innerDiv.classList.add("innerDiv");
+            parentDiv[0].appendChild(innerDiv);
+        });
+
+        btn[0].addEventListener('click', () => {
+            console.log("Sorting started!");
+            myFunction(arr);
+        });
+
+        const sleep = (time) => {
+            return new Promise(resolve => setTimeout(resolve, time));
+        };
+
+        async function myFunction(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = 0; j < (arr.length - i - 1); j++) {
+                    await sleep(500);
+                    if (arr[j] > arr[j + 1]) {
+                        swapNumber(arr, j);
+                        swapColorHeight(j);
+                    }
+                }
+            }
+            console.log("Sorting completed!");
+        }
+
+        function swapNumber(arr, j) {
+            let temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+        }
+
+        function swapColorHeight(j) {
+            let a = 'elem' + j;
+            let b = 'elem' + (j + 1);
+            let e1 = document.getElementById(a);
+            let e2 = document.getElementById(b);
+
+            console.log(`Swapping: ${a} with ${b}`);
+
+            let bg1 = e1.style.backgroundColor;
+            let bg2 = e2.style.backgroundColor;
+            let h1 = e1.clientHeight;
+            let h2 = e2.clientHeight;
+
+            e1.style.backgroundColor = bg2;
+            e2.style.backgroundColor = bg1;
+            e1.style.height = h2 + "px";
+            e2.style.height = h1 + "px";
+        }
+    </script>
+</body>
+</html>
